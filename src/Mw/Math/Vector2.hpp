@@ -11,6 +11,7 @@
 #include <cmath>
 #include <limits>
 #include <ostream>
+#include <stdexcept>
 
 #include <boost/assert.hpp>
 #include <boost/operators.hpp>
@@ -18,7 +19,8 @@
 MW_BEGIN_NAMESPACE(math)
 
 /**
- * @brief 2-dimensional vector.
+ * 2-dimensional vector.
+ *
  * @tparam T Scalar type.
  */
 template<typename T>
@@ -27,12 +29,12 @@ class Vector2 : boost::additive<Vector2<T> >,
                 boost::equality_comparable<Vector2<T> >
 {
     /**
-     * @brief Vector's horizontal component.
+     * Vector's horizontal component.
      */
     T _x;
 
     /**
-     * @brief Vector's vertical component.
+     * Vector's vertical component.
      */
     T _y;
 
@@ -41,16 +43,19 @@ public:
     // Constructors
 
     /**
-     * @brief Default constructor.
-     * @details Vector components are initialized to 0 (null vector).
+     * Default constructor.
+     *
+     * Vector components are initialized to 0 (null vector).
      */
     Vector2()
         : _x(static_cast<T>(0)), _y(static_cast<T>(0))
     {}
 
     /**
-     * @brief Constructor.
-     * @details Construct a vector with given components.
+     * Constructor.
+     *
+     * Construct a vector with given components.
+     *
      * @param x Horizontal component.
      * @param y Vertical component.
      */
@@ -59,7 +64,8 @@ public:
     {}
 
     /**
-     * @brief Copy constructor.
+     * Copy constructor.
+     *
      * @param vec Vector to copy.
      */
     template <typename U>
@@ -71,8 +77,9 @@ public:
     // Getters / setters
 
     /**
-     * @brief Check if the vector is null.
-     * @details A vector is null if all it's components are equal to 0.
+     * Check if the vector is null.
+     *
+     * A vector is null if all it's components are equal to 0.
      */
     bool isNull() const
     {
@@ -80,7 +87,8 @@ public:
     }
 
     /**
-     * @brief Get horizontal component of this vector.
+     * Get horizontal component of this vector.
+     *
      * @return Horizontal component.
      */
     T getX() const
@@ -89,7 +97,8 @@ public:
     }
 
     /**
-     * @brief Get vertical component of this vector.
+     * Get vertical component of this vector.
+     *
      * @return Vertical component.
      */
     T getY() const
@@ -98,7 +107,8 @@ public:
     }
 
     /**
-     * @brief Set components of this vector to given values.
+     * Set components of this vector to given values.
+     *
      * @param x Horizontal component.
      * @param y Vertical component.
      */
@@ -109,7 +119,8 @@ public:
     }
 
     /**
-     * @brief Set vertical component of this vector to given value.
+     * Set vertical component of this vector to given value.
+     *
      * @param x Horizontal component.
      */
     void setX(T x)
@@ -118,7 +129,8 @@ public:
     }
 
     /**
-     * @brief Set horizontal component of this vector to given value.
+     * Set horizontal component of this vector to given value.
+     *
      * @param y Vertical component.
      */
     void setY(T y)
@@ -130,7 +142,8 @@ public:
     // Operations
 
     /**
-     * @brief Compute the dot product of 2 vectors.
+     * Compute the dot product of 2 vectors.
+     *
      * @param vec Second vector.
      * @return Dot product between this vector and @c vec.
      */
@@ -154,7 +167,8 @@ public:
     }
 
     /**
-     * @brief Get the inverse of this vector.
+     * Get the inverse of this vector.
+     *
      * @return Invert of this vector.
      */
     Vector2 operator - () const
@@ -171,7 +185,9 @@ public:
 
     Vector2 & operator /= (T f)
     {
-        // TODO DBZ!
+        if (f == static_cast<T>(0))
+            throw std::invalid_argument("Mw.Math.Vector2: Division by zero");
+
         _x /= f;
         _y /= f;
         return *this;
@@ -179,15 +195,16 @@ public:
 
     bool operator == (const Vector2 & vec) const
     {
-        return (std::fabs(_x - vec._x) <= std::numeric_limits<T>::epsilon()
-             && std::fabs(_y - vec._y) <= std::numeric_limits<T>::epsilon());
+        return (std::abs(_x - vec._x) <= std::numeric_limits<T>::epsilon()
+             && std::abs(_y - vec._y) <= std::numeric_limits<T>::epsilon());
     }
 
 
     // Computations
 
     /**
-     * @brief Compute the length of this vector.
+     * Compute the length of this vector.
+     *
      * @return Length of this vector.
      */
     T getLength() const
@@ -196,16 +213,17 @@ public:
     }
 
     /**
-     * @brief Get a rotation of this vector by a given angle.
+     * Get a rotation of this vector by a given angle.
+     *
      * @param angle Angle in radians.
      * @return Rotated copy of this vector.
      */
-    Vector2 getRotation(float angle) const
+    Vector2 getRotation(T angle) const
     {
         if (!angle) return *this;
 
-        float cos = std::cos(angle);
-        float sin = std::sin(angle);
+        T cos = std::cos(angle);
+        T sin = std::sin(angle);
 
         Vector2 t;
         t._x = cos * _x - sin * _y;
@@ -215,15 +233,16 @@ public:
     }
 
     /**
-     * @brief Rotate this vector by a given angle.
+     * Rotate this vector by a given angle.
+     *
      * @param angle Angle in radians.
      */
-    void rotate(float angle)
+    void rotate(T angle)
     {
         if (!angle) return;
 
-        float cos = std::cos(angle);
-        float sin = std::sin(angle);
+        T cos = std::cos(angle);
+        T sin = std::sin(angle);
 
         T t = cos * _x - sin * _y;
         _y = sin * _x + cos * _y;
@@ -231,7 +250,8 @@ public:
     }
 
     /**
-     * @brief Get a normalization of this vector.
+     * Get a normalization of this vector.
+     *
      * @return Normalized copy of this vector.
      */
     Vector2 getNormalization() const
@@ -243,7 +263,7 @@ public:
     }
 
     /**
-     * @brief Normalize this vector.
+     * Normalize this vector.
      */
     void normalize()
     {
@@ -255,7 +275,8 @@ public:
     }
 
     /**
-     * @brief Get a projection of this vector on given vector.
+     * Get a projection of this vector on given vector.
+     *
      * @param vec Vector to project this vector on.
      * @return Projection of this vector on @c vec.
      */
@@ -263,7 +284,7 @@ public:
     {
         BOOST_ASSERT(!vec.isNull());
 
-        float prod = vec.getLength();
+        T prod = vec.getLength();
         prod *= prod;
         prod = dot(vec) / prod;
         // prod = dotProduct / len ^ 2
@@ -272,14 +293,15 @@ public:
     }
 
     /**
-     * @brief Project this vector on given vector.
+     * Project this vector on given vector.
+     *
      * @param vec Vector to project this vector on.
      */
     void project(const Vector2 & vec)
     {
         BOOST_ASSERT(!vec.isNull());
 
-        float prod = vec.getLength();
+        T prod = vec.getLength();
         prod *= prod;
         prod = dot(vec) / prod;
         // prod = dotProduct / len ^ 2
@@ -289,7 +311,8 @@ public:
     }
 
     /**
-     * @brief Get the scalar projection of this vector on given vector.
+     * Get the scalar projection of this vector on given vector.
+     *
      * @param vec Vector to project this vector on.
      * @return Scalar projection of this vector on @c vec.
      */
@@ -299,7 +322,8 @@ public:
     }
 
     /**
-     * @brief Get the left hand normal of this vector.
+     * Get the left hand normal of this vector.
+     *
      * @return Left hand normal of this vector.
      */
     Vector2 getLeftHandNormal() const
@@ -308,7 +332,8 @@ public:
     }
 
     /**
-     * @brief Get the right hand normal of this vector.
+     * Get the right hand normal of this vector.
+     *
      * @return Right hand normal of this vector.
      */
     Vector2 getRightHandNormal() const
@@ -321,7 +346,8 @@ public:
 
 
 /**
- * @brief Stream insertion operator overload.
+ * Stream insertion operator overload.
+ *
  * @param ostr Output stream.
  * @param vec Vector to insert into the stream.
  * @return @c ostr Output stream.

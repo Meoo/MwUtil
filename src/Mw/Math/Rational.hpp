@@ -17,7 +17,8 @@
 MW_BEGIN_NAMESPACE(math)
 
 /**
- * @brief Rational number.
+ * Rational number.
+ *
  * @tparam T Integer type.
  */
 template<typename T>
@@ -25,17 +26,18 @@ class Rational : boost::arithmetic<Rational<T> >,
                  boost::totally_ordered<Rational<T> >
 {
     /**
-     * @brief Fraction's numerator.
+     * Fraction's numerator.
      */
     T _numerator;
 
     /**
-     * @brief Fraction's denominator.
+     * Fraction's denominator.
      */
     T _denominator;
 
     /**
-     * @brief Compute gcd of 2 numbers.
+     * Compute gcd of 2 numbers.
+     *
      * @param a First number.
      * @param b Second number.
      */
@@ -56,7 +58,7 @@ class Rational : boost::arithmetic<Rational<T> >,
     }
 
     /**
-     * @brief Normalize the fraction.
+     * Normalize the fraction.
      */
     void normalize()
     {
@@ -78,15 +80,17 @@ public:
     // Constructors
 
     /**
-     * @brief Default constructor.
-     * @details The rational number is initialized to 0 (0/1).
+     * Default constructor.
+     *
+     * The rational number is initialized to 0 (0/1).
      */
     Rational()
         : _numerator(static_cast<T>(0)), _denominator(static_cast<T>(1))
     {}
 
     /**
-     * @brief Constructor.
+     * Constructor.
+     *
      * @param numerator Numerator.
      * @param denominator Denominator.
      */
@@ -102,7 +106,8 @@ public:
     // Getters / setters
 
     /**
-     * @brief Cast rational number to any scalar type.
+     * Cast rational number to any scalar type.
+     *
      * @tparam U Scalar type.
      */
     template<typename U>
@@ -113,6 +118,7 @@ public:
 
     /**
      * Get fraction's numerator.
+     *
      * @return Fraction's numerator.
      */
     T getNumerator() const
@@ -122,6 +128,7 @@ public:
 
     /**
      * Get fraction's denominator.
+     *
      * @return Fraction's denominator.
      */
     T getDenominator() const
@@ -130,7 +137,8 @@ public:
     }
 
     /**
-     * @brief Set fraction's values.
+     * Set fraction's values.
+     *
      * @param numerator Fraction's numerator.
      * @param denominator Fraction's denominator.
      */
@@ -144,7 +152,8 @@ public:
     }
 
     /**
-     * @brief Set fraction's numerator.
+     * Set fraction's numerator.
+     *
      * @param numerator Fraction's numerator.
      * @warning Using this function may lead to unexpected results as the
      *          fraction is normalized every time a value is changed.
@@ -156,7 +165,8 @@ public:
     }
 
     /**
-     * @brief Set fraction's denominator.
+     * Set fraction's denominator.
+     *
      * @param denominator Fraction's denominator.
      * @warning Using this function may lead to unexpected results as the
      *          fraction is normalized every time a value is changed.

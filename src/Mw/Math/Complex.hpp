@@ -16,7 +16,8 @@
 MW_BEGIN_NAMESPACE(math)
 
 /**
- * @brief Representation of a complex number.
+ * Representation of a complex number.
+ *
  * @tparam T Scalar type.
  */
 template<class T>
@@ -24,12 +25,12 @@ class Complex : boost::arithmetic<Complex<T> >,
                 boost::equality_comparable<Complex<T> >
 {
     /**
-     * @brief Real part.
+     * Real part.
      */
     T _a;
 
     /**
-     * @brief Imaginary part.
+     * Imaginary part.
      */
     T _b;
 
@@ -38,14 +39,15 @@ public:
     // Constructors
 
     /**
-     * @brief Default constructor.
+     * Default constructor.
      */
     Complex()
         : _a(static_cast<T>(0)), _b(static_cast<T>(0))
     {}
 
     /**
-     * @brief Constructor.
+     * Constructor.
+     *
      * @param a Real part.
      * @param b Imaginary part.
      */
@@ -54,7 +56,8 @@ public:
     {}
 
     /**
-     * @brief Copy constructor.
+     * Copy constructor.
+     *
      * @param cpx Complex number to copy.
      */
     template <typename U>
@@ -152,7 +155,8 @@ public:
 // class Complex
 
 /**
- * @brief Stream insertion operator overload.
+ * Stream insertion operator overload.
+ *
  * @param ostr Output stream.
  * @param vec Complex number to insert into the stream.
  * @return @c ostr Output stream.

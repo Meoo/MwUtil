@@ -17,7 +17,8 @@ MW_BEGIN_NAMESPACE(math)
 // TODO Comments sucks
 
 /**
- * @brief Compute a value between @a p1 and @a p2 using linear interpolation.
+ * Compute a value between @a p1 and @a p2 using linear interpolation.
+ *
  * @param p1 First sample.
  * @param p2 Second sample.
  * @param mu Position of the value in range. Value between 0 and 1.
@@ -31,7 +32,8 @@ T linearInterpolate(T p1, T p2, U mu)
 }
 
 /**
- * @brief Compute a value between @a p1 and @a p2 using cosine interpolation.
+ * Compute a value between @a p1 and @a p2 using cosine interpolation.
+ *
  * @param p1 First sample.
  * @param p2 Second sample.
  * @param mu Position of the value in range. Value between 0 and 1.
@@ -48,9 +50,12 @@ T cosineInterpolate(T p1, T p2, U mu)
 }
 
 /**
- * @brief Compute a value between @a p1 and @a p2 using cubic interpolation.
+ * Compute a value between @a p1 and @a p2 using cubic interpolation.
+ *
+ * @param p0 Point before first sample.
  * @param p1 First sample.
  * @param p2 Second sample.
+ * @param p3 Point after second sample.
  * @param mu Position of the value in range. Value between 0 and 1.
  * @tparam T Value's type. Must be multipliable by @a U.
  * @tparam U Scalar type.
@@ -70,10 +75,12 @@ T cubicInterpolate(T p0, T p1, T p2, T p3, U mu)
 }
 
 /**
- * @brief Compute a value between @a p1 and @a p2 using catmull-rom
- *        interpolation.
+ * Compute a value between @a p1 and @a p2 using catmull-rom interpolation.
+ *
+ * @param p0 Point before first sample.
  * @param p1 First sample.
  * @param p2 Second sample.
+ * @param p3 Point after second sample.
  * @param mu Position of the value in range. Value between 0 and 1.
  * @tparam T Value's type. Must be multipliable by @a U.
  * @tparam U Scalar type.

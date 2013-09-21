@@ -14,7 +14,8 @@
 MW_BEGIN_NAMESPACE(math)
 
 /**
- * @brief Representation of a plane.
+ * Representation of a plane.
+ *
  * @tparam T Scalar type.
  * @tparam V Vectorial type.
  */
@@ -22,12 +23,12 @@ template<typename T, class V>
 class Plane
 {
     /**
-     * @brief Plane's normal.
+     * Plane's normal.
      */
     V _normal;
 
     /**
-     * @brief Distance from origin.
+     * Distance from origin.
      */
     T _origin;
 
@@ -36,7 +37,8 @@ public:
     // Constructors
 
     /**
-     * @brief Constructor.
+     * Constructor.
+     *
      * @param normal A vector orthogonal to the plane.
      * @param point A point on the plane.
      */
@@ -49,7 +51,8 @@ public:
     // Getters / setters
 
     /**
-     * @brief Get the plane's normal vector.
+     * Get the plane's normal vector.
+     *
      * @return Plane's normal vector.
      */
     V getNormal() const
@@ -58,7 +61,8 @@ public:
     }
 
     /**
-     * @brief Return the shortest distance between this plane and the origin.
+     * Return the shortest distance between this plane and the origin.
+     *
      * @return Shortest distance between this plane and the origin.
      */
     T getDistanceFromOrigin() const
@@ -67,7 +71,8 @@ public:
     }
 
     /**
-     * @brief Set the plane's values.
+     * Set the plane's values.
+     *
      * @param normal A vector orthogonal to the plane.
      * @param point A point on the plane.
      */
@@ -78,7 +83,8 @@ public:
     }
 
     /**
-     * @brief Check if given point is on the plane.
+     * Check if given point is on the plane.
+     *
      * @param point A point.
      * @return @c true if the point is on the plane, @c false otherwise.
      */
@@ -88,7 +94,8 @@ public:
     }
 
     /**
-     * @brief Check if given point is over the plane.
+     * Check if given point is over the plane.
+     *
      * @param point A point.
      * @return @c true if the point is over the plane, @c false otherwise.
      */
@@ -98,7 +105,8 @@ public:
     }
 
     /**
-     * @brief Check if given point is under the plane.
+     * Check if given point is under the plane.
+     *
      * @param point A point.
      * @return @c true if the point is under the plane, @c false otherwise.
      */
@@ -111,8 +119,10 @@ public:
     // Computations
 
     /**
-     * @brief Get the distance between this plane and given point.
-     * @details Returns 0 if the point is on the plane.
+     * Get the distance between this plane and given point.
+     *
+     * Returns 0 if the point is on the plane.
+     *
      * @param point A point.
      * @return Distance between this plane and given point.
      */
@@ -125,7 +135,8 @@ public:
     }
 
     /**
-     * @brief Get the projection of a point on this plane.
+     * Get the projection of a point on this plane.
+     *
      * @param point A point.
      * @return Projection of given point on this plane.
      */
@@ -139,8 +150,8 @@ public:
 };
 // class Plane
 
-template<typename T = float> typedef Plane<T, Vector2<T> > Plane2;
-template<typename T = float> typedef Plane<T, Vector3<T> > Plane3;
+template<typename T> typedef Plane<T, Vector2<T> > Plane2;
+template<typename T> typedef Plane<T, Vector3<T> > Plane3;
 
 MW_END_NAMESPACE(math)
 

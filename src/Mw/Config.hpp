@@ -10,11 +10,11 @@
 
 /**
  * @def MW_MAJOR
- * @brief Mw library major version number.
+ * Mw library major version number.
  */
 /**
  * @def MW_MINOR
- * @brief Mw library minor version number.
+ * Mw library minor version number.
  */
 
 #define MW_MAJOR 1
@@ -26,11 +26,11 @@
 
 /**
  * @def MW_API
- * @brief Public visibility.
+ * Public visibility.
  */
 /**
  * @def MW_LOCAL
- * @brief Private visibility.
+ * Private visibility.
  */
 
 #if defined _WIN32 || defined __CYGWIN__
