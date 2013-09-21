@@ -8,7 +8,9 @@
 
 #include <Mw/Math/Vector2.hpp>
 
-#define EPSILON 0.00001
+#include <cmath>
+
+#define EPSILON std::numeric_limits<T>::epsilon() * 100
 
 typedef boost::mpl::list<float, double> test_types;
 
