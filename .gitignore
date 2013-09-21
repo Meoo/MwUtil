@@ -1,4 +1,5 @@
 # Compiled Object files
+bin
 *.slo
 *.lo
 *.o
@@ -11,3 +12,13 @@
 *.lai
 *.la
 *.a
+
+# Eclipse project files
+.project
+.cproject
+.settings
+
+# Premake4 executables and generated Makefile
+premake4
+premake4.exe
+Makefile
