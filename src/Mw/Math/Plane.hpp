@@ -55,7 +55,7 @@ public:
      *
      * @return Plane's normal vector.
      */
-    V getNormal() const
+    const V & getNormal() const
     {
         return _normal;
     }
