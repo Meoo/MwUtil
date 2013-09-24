@@ -11,6 +11,8 @@ If you want to compile the MwUtil's test program, you will have to compile boost
 Lua Module
 ----------
 
+**ON HOLD**
+
 Provide object oriented wrapper classes to Lua.
 
 Math Module
@@ -23,3 +25,10 @@ Useful math functions and classes.
 * Vectors
 * Planes
 * Interpolation functions
+
+Tween Module
+------------
+
+**PLANNED**
+
+Provide simple classes and interfaces to use tweening
