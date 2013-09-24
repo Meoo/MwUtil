@@ -85,6 +85,8 @@ public:
      * Check if the vector is null.
      *
      * A vector is null if all it's components are equal to 0.
+     *
+     * @return @c true if the vector is null.
      */
     bool isNull() const
     {

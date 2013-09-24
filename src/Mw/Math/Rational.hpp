@@ -234,7 +234,7 @@ public:
     }
 
     /**
-     * @throw std::runtime_exception Division by zero
+     * @throw std::invalid_argument Division by zero
      */
     Rational & operator /= (const Rational & rat)
     {
@@ -270,7 +270,8 @@ public:
 
 
 /**
- * @brief Stream insertion operator overload.
+ * Stream insertion operator overload.
+ *
  * @param ostr Output stream.
  * @param vec Rational to insert into the stream.
  * @return @c ostr Output stream.
