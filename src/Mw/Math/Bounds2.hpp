@@ -20,17 +20,17 @@ MW_BEGIN_NAMESPACE(math)
 template<typename T>
 class Bounds2
 {
-    typedef Vector2<T> Vector;
+    typedef Vector2<T> Vector2;
 
     /**
      * Upper limit of the bounds.
      */
-    Vector _upper_limit;
+    Vector2 _upper_limit;
 
     /**
      * Lower limit of the bounds.
      */
-    Vector _lower_limit;
+    Vector2 _lower_limit;
 
 public:
     /**
@@ -48,7 +48,7 @@ public:
      * @param first First point.
      * @param second Second point.
      */
-    Bounds2(const Vector & first, const Vector & second)
+    Bounds2(const Vector2 & first, const Vector2 & second)
     {
         set(first, second);
     }
@@ -63,6 +63,11 @@ public:
         : _upper_limit(bounds.getUpperLimit()), _lower_limit(bounds.getLowerLimit())
     {}
 
+    /**
+     * Check if the bounds are empty.
+     *
+     * @return @c true if the bounds are empty.
+     */
     bool isEmpty() const
     {
         return _upper_limit.getX() <= _lower_limit.getX()
@@ -74,7 +79,7 @@ public:
      *
      * @return Upper limit of this bounds.
      */
-    const Vector & getUpperLimit() const
+    const Vector2 & getUpperLimit() const
     {
         return _upper_limit;
     }
@@ -84,7 +89,7 @@ public:
      *
      * @return Lower limit of this bounds.
      */
-    const Vector & getLowerLimit() const
+    const Vector2 & getLowerLimit() const
     {
         return _lower_limit;
     }
@@ -97,7 +102,7 @@ public:
      * @param first First point.
      * @param second Second point.
      */
-    void set(const Vector & first, const Vector & second)
+    void set(const Vector2 & first, const Vector2 & second)
     {
         if (first.getX() > second.getX())
         {
@@ -129,7 +134,7 @@ public:
      *
      * @param upper_limit New upper limit of the bounds.
      */
-    void setUpperLimit(const Vector & upper_limit)
+    void setUpperLimit(const Vector2 & upper_limit)
     {
         _upper_limit = upper_limit;
     }
@@ -141,7 +146,7 @@ public:
      *
      * @param lower_limit New lower limit of the bounds.
      */
-    void setLowerLimit(const Vector & lower_limit)
+    void setLowerLimit(const Vector2 & lower_limit)
     {
         _lower_limit = lower_limit;
     }
@@ -151,8 +156,7 @@ public:
      *
      * @param vec Point to include in this bounds.
      */
-    template <typename U>
-    void include(const Vector & vec)
+    void include(const Vector2 & vec)
     {
         if (vec.getX() > _upper_limit.getX())
             _upper_limit.setX(vec.getX());
@@ -172,8 +176,7 @@ public:
      *
      * @param bounds Other bounds to include in this bounds.
      */
-    template <typename U>
-    void include(const Bounds2<U> & bounds)
+    void include(const Bounds2 & bounds)
     {
         join(bounds.getUpperLimit());
         join(bounds.getLowerLimit());
@@ -186,11 +189,10 @@ public:
      *
      * @param bounds Other bounds for this bounds to be included into.
      */
-    template <typename U>
-    void intersect(const Bounds2<U> & bounds)
+    void intersect(const Bounds2 & bounds)
     {
-        const Vector2<U> & upper = bounds.getUpperLimit();
-        const Vector2<U> & lower = bounds.getLowerLimit();
+        const Vector2 & upper = bounds.getUpperLimit();
+        const Vector2 & lower = bounds.getLowerLimit();
 
         if (upper.getX() < _upper_limit.getX())
             _upper_limit.setX(upper.getX());
@@ -206,13 +208,25 @@ public:
     }
 
     /**
+     * Compute the intersection between this bounds and given bounds.
+     *
+     * @param bounds Other bounds to compute the intersection with.
+     * @return
+     */
+    Bounds2 getIntersection(const Bounds2 & bounds)
+    {
+        Bounds2 copy(*this);
+        copy.intersect(bounds);
+        return copy;
+    }
+
+    /**
      * Check if a point is inside this bounds.
      *
      * @param vec Point to check.
      * @return @c true if the point is inside the bounds.
      */
-    template <typename U>
-    bool isInside(const Vector & vec) const
+    bool isInside(const Vector2 & vec) const
     {
         return vec.getX() <= _upper_limit.getX()
             && vec.getY() <= _upper_limit.getY()
@@ -226,8 +240,7 @@ public:
      * @param bounds Other bounds to check.
      * @return @c true if the bounds are included in this bounds.
      */
-    template <typename U>
-    bool isInside(const Bounds2<U> & bounds) const
+    bool isInside(const Bounds2 & bounds) const
     {
         return bounds.getUpperLimit().getX() <= _upper_limit.getX()
             && bounds.getUpperLimit().getY() <= _upper_limit.getY()
