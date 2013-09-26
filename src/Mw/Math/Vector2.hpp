@@ -257,19 +257,6 @@ public:
     }
 
     /**
-     * Get a normalization of this vector.
-     *
-     * @return Normalized copy of this vector.
-     */
-    Vector2 getNormalization() const
-    {
-        BOOST_ASSERT(!isNull());
-
-        T l = getLength();
-        return Vector2(_x/l, _y/l);
-    }
-
-    /**
      * Normalize this vector.
      */
     void normalize()
@@ -282,21 +269,15 @@ public:
     }
 
     /**
-     * Get a projection of this vector on given vector.
+     * Get a normalization of this vector.
      *
-     * @param vec Vector to project this vector on.
-     * @return Projection of this vector on @c vec.
+     * @return Normalized copy of this vector.
      */
-    Vector2 getProjection(const Vector2 & vec) const
+    Vector2 getNormalization() const
     {
-        BOOST_ASSERT(!vec.isNull());
-
-        T prod = vec.getLength();
-        prod *= prod;
-        prod = dot(vec) / prod;
-        // prod = dotProduct / len ^ 2
-
-        return Vector2(prod * vec._x, prod * vec._y);
+        Vector2 copy(*this);
+        copy.normalize();
+        return copy;
     }
 
     /**
@@ -315,6 +296,19 @@ public:
 
         _x = prod * vec._x;
         _y = prod * vec._y;
+    }
+
+    /**
+     * Get a projection of this vector on given vector.
+     *
+     * @param vec Vector to project this vector on.
+     * @return Projection of this vector on @c vec.
+     */
+    Vector2 getProjection(const Vector2 & vec) const
+    {
+        Vector2 copy(*this);
+        copy.project(vec);
+        return copy;
     }
 
     /**
