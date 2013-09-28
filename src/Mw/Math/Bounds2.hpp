@@ -178,8 +178,8 @@ public:
      */
     void include(const Bounds2 & bounds)
     {
-        join(bounds.getUpperLimit());
-        join(bounds.getLowerLimit());
+        include(bounds.getUpperLimit());
+        include(bounds.getLowerLimit());
     }
 
     /**
