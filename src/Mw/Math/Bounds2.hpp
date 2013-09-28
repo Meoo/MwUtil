@@ -16,21 +16,20 @@ MW_BEGIN_NAMESPACE(math)
  * 2-dimensional bounds in the space.
  *
  * @tparam T Scalar type.
+ * @tparam V Vectorial type.
  */
-template<typename T>
+template<typename T, class V = Vector2<T> >
 class Bounds2
 {
-    typedef Vector2<T> Vector2;
-
     /**
      * Upper limit of the bounds.
      */
-    Vector2 _upper_limit;
+    V _upper_limit;
 
     /**
      * Lower limit of the bounds.
      */
-    Vector2 _lower_limit;
+    V _lower_limit;
 
 public:
     /**
@@ -48,7 +47,7 @@ public:
      * @param first First point.
      * @param second Second point.
      */
-    Bounds2(const Vector2 & first, const Vector2 & second)
+    Bounds2(const V & first, const V & second)
     {
         set(first, second);
     }
@@ -58,8 +57,8 @@ public:
      *
      * @param bounds Bounds to copy.
      */
-    template <typename U>
-    Bounds2(const Bounds2<U> & bounds)
+    template <typename U, class W>
+    Bounds2(const Bounds2<U, W> & bounds)
         : _upper_limit(bounds.getUpperLimit()), _lower_limit(bounds.getLowerLimit())
     {}
 
@@ -79,7 +78,7 @@ public:
      *
      * @return Upper limit of this bounds.
      */
-    const Vector2 & getUpperLimit() const
+    const V & getUpperLimit() const
     {
         return _upper_limit;
     }
@@ -89,7 +88,7 @@ public:
      *
      * @return Lower limit of this bounds.
      */
-    const Vector2 & getLowerLimit() const
+    const V & getLowerLimit() const
     {
         return _lower_limit;
     }
@@ -102,7 +101,7 @@ public:
      * @param first First point.
      * @param second Second point.
      */
-    void set(const Vector2 & first, const Vector2 & second)
+    void set(const V & first, const V & second)
     {
         if (first.getX() > second.getX())
         {
@@ -134,7 +133,7 @@ public:
      *
      * @param upper_limit New upper limit of the bounds.
      */
-    void setUpperLimit(const Vector2 & upper_limit)
+    void setUpperLimit(const V & upper_limit)
     {
         _upper_limit = upper_limit;
     }
@@ -146,7 +145,7 @@ public:
      *
      * @param lower_limit New lower limit of the bounds.
      */
-    void setLowerLimit(const Vector2 & lower_limit)
+    void setLowerLimit(const V & lower_limit)
     {
         _lower_limit = lower_limit;
     }
@@ -156,7 +155,7 @@ public:
      *
      * @param vec Point to include in this bounds.
      */
-    void include(const Vector2 & vec)
+    void include(const V & vec)
     {
         if (vec.getX() > _upper_limit.getX())
             _upper_limit.setX(vec.getX());
@@ -191,8 +190,8 @@ public:
      */
     void intersect(const Bounds2 & bounds)
     {
-        const Vector2 & upper = bounds.getUpperLimit();
-        const Vector2 & lower = bounds.getLowerLimit();
+        const V & upper = bounds.getUpperLimit();
+        const V & lower = bounds.getLowerLimit();
 
         if (upper.getX() < _upper_limit.getX())
             _upper_limit.setX(upper.getX());
@@ -226,7 +225,7 @@ public:
      * @param vec Point to check.
      * @return @c true if the point is inside the bounds.
      */
-    bool isInside(const Vector2 & vec) const
+    bool isInside(const V & vec) const
     {
         return vec.getX() <= _upper_limit.getX()
             && vec.getY() <= _upper_limit.getY()
