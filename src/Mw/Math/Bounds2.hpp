@@ -32,6 +32,9 @@ class Bounds2
     V _lower_limit;
 
 public:
+
+    // Constructors
+
     /**
      * Default constructor.
      */
@@ -61,6 +64,9 @@ public:
     Bounds2(const Bounds2<U, W> & bounds)
         : _upper_limit(bounds.getUpperLimit()), _lower_limit(bounds.getLowerLimit())
     {}
+
+
+    // Getters / setters
 
     /**
      * Check if the bounds are empty.
@@ -149,6 +155,9 @@ public:
     {
         _lower_limit = lower_limit;
     }
+
+
+    // Functions
 
     /**
      * Expand the bounds to include a point.
