@@ -234,7 +234,7 @@ public:
      * @param vec Point to check.
      * @return @c true if the point is inside the bounds.
      */
-    bool isInside(const V & vec) const
+    bool hasPointInside(const V & vec) const
     {
         return vec.getX() <= _upper_limit.getX()
             && vec.getY() <= _upper_limit.getY()
@@ -248,12 +248,23 @@ public:
      * @param bounds Other bounds to check.
      * @return @c true if the bounds are included in this bounds.
      */
-    bool isInside(const Bounds2 & bounds) const
+    bool hasBoundsInside(const Bounds2 & bounds) const
     {
         return bounds.getUpperLimit().getX() <= _upper_limit.getX()
             && bounds.getUpperLimit().getY() <= _upper_limit.getY()
             && bounds.getLowerLimit().getX() >= _lower_limit.getX()
             && bounds.getLowerLimit().getY() >= _lower_limit.getY();
+    }
+
+    /**
+     * Check if another bounds is intersecting with this bounds.
+     *
+     * @param bounds Other bounds to check the intersection with.
+     * @return
+     */
+    bool isIntersecting(const Bounds2 & bounds)
+    {
+        return !getIntersection(bounds).isEmpty();
     }
 
 };
