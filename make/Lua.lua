@@ -12,24 +12,20 @@ newoption {
   description = "Lua base directory (must contain include directory)"
 }
 
-if not _OPTIONS["lua_directory"] then
-  _OPTIONS["lua_directory"] = ""
-end
-
 newoption {
   trigger     = "lua_bin_directory",
   value       = "path",
-  description = "[Optional] SFML2 build directory (must contains lib directory)"
+  description = "[Optional] Lua build directory (must contains lib directory)"
 }
 
 if not _OPTIONS["lua_bin_directory"] then
-  _OPTIONS["lua_bin_directory"] = _OPTIONS["lua_directory"]
+  _OPTIONS["lua_bin_directory"] = _OPTIONS["lua_directory"] or ""
 end
 
 -- ///////////////////////////////////////////////////// --
 
 -- LUA paths
-LUA_DIR         = _OPTIONS["lua_directory"]
+LUA_DIR         = _OPTIONS["lua_directory"] or ""
 LUA_INCLUDE_DIR = LUA_DIR .."/include"
 LUA_LIBS_DIR    = _OPTIONS["lua_bin_directory"] .."/lib"
 
