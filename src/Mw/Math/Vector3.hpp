@@ -181,6 +181,21 @@ public:
         return _x * vec._x + _y * vec._y + _z * vec._z;
     }
 
+    /**
+     * Compute the cross product of 2 vectors.
+     *
+     * It can be used to get the right hand normal to two vectors.
+     *
+     * @note A x B == -B x A
+     *
+     * @param vec Second vector.
+     * @return Cross product of this x vec.
+     */
+    Vector3 cross(const Vector3 & vec) const
+    {
+        return Vector3(_y * vec._z - _z * vec._y, _z * vec._x - _x * vec._z, _x * vec._y - _y * vec._x);
+    }
+
     Vector3 & operator += (const Vector3 & vec)
     {
         _x += vec._x;
