@@ -152,6 +152,7 @@ public:
 
 template<typename T> typedef Plane<T, Vector2<T> > Plane2;
 template<typename T> typedef Plane<T, Vector3<T> > Plane3;
+template<typename T> typedef Plane<T, Vector4<T> > Plane4;
 
 MW_END_NAMESPACE(math)
 
