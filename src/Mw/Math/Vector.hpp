@@ -18,6 +18,10 @@
 #include <boost/assert.hpp>
 #include <boost/operators.hpp>
 
+#ifndef BOOST_NO_CXX11_HDR_INITIALIZER_LIST
+#include <initializer_list>
+#endif
+
 MW_BEGIN_NAMESPACE(math)
 
 /**
@@ -31,7 +35,7 @@ class Vector : boost::additive<Vector<T, N> >,
                boost::multiplicative<Vector<T, N>, T>,
                boost::equality_comparable<Vector<T, N> >
 {
-    BOOST_STATIC_ASSERT_MSG(N == 0, "Invalid number of components in mw::math::Vector");
+    BOOST_STATIC_ASSERT_MSG(N == 0, "Mw.Math.Vector: Invalid template number of components");
 
     /**
      * Vector's components.
@@ -62,6 +66,22 @@ public:
         for (unsigned i = 0; i < N; ++i)
             set<i>(vec.get<i>());
     }
+
+#ifndef BOOST_NO_CXX11_HDR_INITIALIZER_LIST
+    /**
+     * Initializer list constructor.
+     *
+     * @param list Initializer list.
+     */
+    explicit Vector(const std::initializer_list<T> & list)
+    {
+        BOOST_ASSERT_MSG(list.size() == N, "Mw.Math.Vector: Invalid initializer list size");
+
+        unsigned i = 0;
+        for (T v : list)
+            set<i>(v);
+    }
+#endif
 
 
     // Getters / setters
