@@ -262,6 +262,28 @@ public:
         return sum;
     }
 
+    /**
+     * Compute the cross product of 2 vectors.
+     *
+     * It can be used to get the right hand normal to two vectors.
+     *
+     * @note A x B == -B x A
+     *
+     * @param vec Second vector.
+     * @return Cross product of this x vec.
+     *
+     * @note Only defined on 3-dimensional vectors.
+     */
+    typename boost::enable_if<(N == 3), Vector>::type
+    cross(const Vector3 & vec) const
+    {
+        Vector t;
+        t.setX(getY() * vec.getZ() - getZ() * vec.getY());
+        t.setY(getZ() * vec.getX() - getX() * vec.getZ());
+        t.setZ(getX() * vec.getY() - getY() * vec.getX());
+        return t;
+    }
+
     Vector & operator += (const Vector & vec)
     {
         for (unsigned i = 0; i < N; ++i)
@@ -345,76 +367,6 @@ public:
         return std::sqrt(len);
     }
 
-    /**
-     * Normalize this vector.
-     */
-    void normalize()
-    {
-        if (isNull())
-            throw std::domain_error("Mw.Math.Vector: Normalization not defined for null vectors");
-
-        T len = getLength();
-
-        for (unsigned i = 0; i < N; ++i)
-            set<i>(get<i>() / len);
-    }
-
-    /**
-     * Get a normalization of this vector.
-     *
-     * @return Normalized copy of this vector.
-     */
-    Vector getNormalization() const
-    {
-        Vector copy(*this);
-        copy.normalize();
-        return copy;
-    }
-
-    /**
-     * Project this vector onto given vector.
-     *
-     * @param vec Vector to project this vector on.
-     */
-    void project(const Vector & vec)
-    {
-        BOOST_ASSERT(!vec.isNull());
-
-        // prod = dot(A, B) / B.length ^ 2
-        T prod = static_cast<T>(0);
-        for (unsigned i = 0; i < N; ++i)
-            prod += vec.get<i>()^2;
-
-        prod = dot(vec) / prod;
-
-        for (unsigned i = 0; i < N; ++i)
-            set<i>(vec.get<i>() * prod);
-    }
-
-    /**
-     * Get a projection of this vector on given vector.
-     *
-     * @param vec Vector to project this vector on.
-     * @return Projection of this vector on @c vec.
-     */
-    Vector getProjection(const Vector & vec) const
-    {
-        Vector copy(*this);
-        copy.project(vec);
-        return copy;
-    }
-
-    /**
-     * Get the scalar projection of this vector on given vector.
-     *
-     * @param vec Vector to project this vector on.
-     * @return Scalar projection of this vector on @c vec.
-     */
-    T getScalarProjection(const Vector & vec) const
-    {
-        return dot(vec.getNormalization());
-    }
-
 };
 // class Vector
 
@@ -422,6 +374,67 @@ template<typename T> typedef Vector<T, 2> Vector2;
 template<typename T> typedef Vector<T, 3> Vector3;
 template<typename T> typedef Vector<T, 4> Vector4;
 
+
+/**
+ * Compute the projection of the first vector on the second vector.
+ *
+ * @param first Vector to be projected.
+ * @param second
+ * @return Projection of first vector on second.
+ */
+template<typename T, unsigned N>
+Vector<T, N> project(const Vector<T, N> & first, const Vector<T, N> & second)
+{
+    BOOST_ASSERT(!second.isNull());
+
+    if (first.isNull())
+        return Vector<T, N>();
+
+    // prod = dot(A, B) / B.length ^ 2
+    T prod = static_cast<T>(0);
+    for (unsigned i = 0; i < N; ++i)
+        prod += second.get<i>()^2;
+
+    prod = first.dot(second) / prod;
+
+    Vector<T, N> t;
+    for (unsigned i = 0; i < N; ++i)
+        t.set<i>(second.get<i>() * prod);
+    return t;
+}
+
+/**
+ * Compute the scalar projection of this vector on given vector.
+ *
+ * @param first Vector to be projected.
+ * @param second
+ * @return Scalar projection of first vector on second.
+ */
+template<typename T, unsigned N>
+T scalarProject(const Vector<T, N> & first, const Vector<T, N> & second) const
+{
+    return first.dot(second.getNormalization());
+}
+
+/**
+ * Normalize a vector.
+ *
+ * @param vector Vector to be normalized.
+ * @return Normalized vector.
+ */
+template<typename T, unsigned N>
+Vector<T, N> normalize(const Vector<T, N> & vector)
+{
+    if (vector.isNull())
+        throw std::domain_error("Mw.Math.Vector: Normalization not defined for null vectors");
+
+    T len = vector.getLength();
+
+    Vector<T, N> t;
+    for (unsigned i = 0; i < N; ++i)
+        t.set<i>(vector.get<i>() / len);
+    return t;
+}
 
 /**
  * Stream insertion operator overload.
