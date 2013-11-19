@@ -35,7 +35,7 @@ class Vector : boost::additive<Vector<T, N> >,
                boost::multiplicative<Vector<T, N>, T>,
                boost::equality_comparable<Vector<T, N> >
 {
-    BOOST_STATIC_ASSERT_MSG(N == 0, "Mw.Math.Vector: Invalid template number of components");
+    BOOST_STATIC_ASSERT_MSG(N > 0, "Mw.Math.Vector: Invalid template number of components");
 
     /**
      * Vector's components.
@@ -52,7 +52,7 @@ public:
      * Vector components are initialized to 0 (null vector).
      */
     Vector()
-        : _components({static_cast<T>(0)})
+        : _components(static_cast<T>(0))
     {}
 
     /**
@@ -64,7 +64,7 @@ public:
     Vector(const Vector<U, N> & vec)
     {
         for (unsigned i = 0; i < N; ++i)
-            set<i>(vec.get<i>());
+            set(i, vec.get(i));
     }
 
 #ifndef BOOST_NO_CXX11_HDR_INITIALIZER_LIST
@@ -96,27 +96,14 @@ public:
     bool isNull() const
     {
         for (unsigned i = 0; i < N; ++i)
-            if (get<i>() != static_cast<T>(0))
+            if (get(i) != static_cast<T>(0))
                 return false;
 
         return true;
     }
 
     /**
-     * Get a component (template version).
-     *
-     * @tparam I Component's index.
-     * @return Component at position I.
-     */
-    template<unsigned I>
-    typename boost::enable_if<(I < N), T>::type
-    get() const
-    {
-        return _components[I];
-    }
-
-    /**
-     * Get a component (template version).
+     * Get a component.
      *
      * @param index Component's index.
      * @return Component at position I.
@@ -127,19 +114,6 @@ public:
             throw std::out_of_range("Mw.Math.Vector: Out of range");
 
         return _components[index];
-    }
-
-    /**
-     * Set a component of this vector to given value (template version).
-     *
-     * @tparam I Component's index.
-     * @param value New value.
-     */
-    template<unsigned I>
-    typename boost::enable_if<(I < N), void>::type
-    set(T value)
-    {
-        _components[I] = value;
     }
 
     /**
@@ -157,113 +131,6 @@ public:
     }
 
 
-    // Simple getters / setters for 2, 3 and 4 components
-
-    /**
-     * Get horizontal component of this vector.
-     *
-     * @return Horizontal component.
-     *
-     * @note Avaiable on vectors of dimension 2, 3 and 4.
-     */
-    typename boost::enable_if<(N >= 2 && N <= 4), T>::type
-    getX() const
-    {
-        return get<0>;
-    }
-
-    /**
-     * Set vertical component of this vector to given value.
-     *
-     * @param x Horizontal component.
-     *
-     * @note Avaiable on vectors of dimension 2, 3 and 4.
-     */
-    typename boost::enable_if<(N >= 2 && N <= 4), void>::type
-    setX(T x)
-    {
-        set<0>(x);
-    }
-
-    /**
-     * Get vertical component of this vector.
-     *
-     * @return Vertical component.
-     *
-     * @note Avaiable on vectors of dimension 2, 3 and 4.
-     */
-    typename boost::enable_if<(N >= 2 && N <= 4), T>::type
-    getY() const
-    {
-        return get<1>;
-    }
-
-    /**
-     * Set horizontal component of this vector to given value.
-     *
-     * @param y Vertical component.
-     *
-     * @note Avaiable on vectors of dimension 2, 3 and 4.
-     */
-    typename boost::enable_if<(N >= 2 && N <= 4), void>::type
-    setY(T y)
-    {
-        set<1>(y);
-    }
-
-    /**
-     * Get depth component of this vector.
-     *
-     * @return Depth component.
-     *
-     * @note Avaiable on vectors of dimension 3 and 4.
-     */
-    typename boost::enable_if<(N >= 3 && N <= 4), T>::type
-    getZ() const
-    {
-        return get<2>;
-    }
-
-    /**
-     * Set depth component of this vector to given value.
-     *
-     * @param z Depth component.
-     *
-     * @note Avaiable on vectors of dimension 3 and 4.
-     */
-    typename boost::enable_if<(N >= 3 && N <= 4), void>::type
-    setZ(T z)
-    {
-        set<2>(z);
-    }
-
-    /**
-     * Get w component of this vector.
-     *
-     * @return W component.
-     *
-     * @note Avaiable on vectors of dimension 4.
-     */
-    typename boost::enable_if<(N == 4), T>::type
-    getW() const
-    {
-        return get<3>;
-    }
-
-    /**
-     * Set w component of this vector to given value.
-     *
-     * @param w W component.
-     *
-     * @note Avaiable on vectors of dimension 4.
-     */
-    typename boost::enable_if<(N == 4), void>::type
-    setW(T w)
-    {
-        set<3>(w);
-    }
-
-
     // Operations
 
     /**
@@ -277,7 +144,7 @@ public:
         T sum = static_cast<T>(0);
 
         for (unsigned i = 0; i < N; ++i)
-            sum += get<i>() * vec.get<i>();
+            sum += get(i) * vec.get(i);
 
         return sum;
     }
@@ -294,20 +161,21 @@ public:
      *
      * @note Only defined on 3-dimensional vectors.
      */
-    typename boost::enable_if<(N == 3), Vector>::type
-    cross(const Vector3 & vec) const
+    template<unsigned M>
+    typename boost::enable_if_c<((N == 3) && (M == 3)), Vector>::type
+    cross(const Vector<T, M> & vec) const
     {
         Vector t;
-        t.setX(getY() * vec.getZ() - getZ() * vec.getY());
-        t.setY(getZ() * vec.getX() - getX() * vec.getZ());
-        t.setZ(getX() * vec.getY() - getY() * vec.getX());
+        t.set(0, get(1) * vec.get(2) - get(2) * vec.get(1));
+        t.set(1, get(2) * vec.get(0) - get(0) * vec.get(2));
+        t.set(2, get(0) * vec.get(1) - get(1) * vec.get(0));
         return t;
     }
 
     Vector & operator += (const Vector & vec)
     {
         for (unsigned i = 0; i < N; ++i)
-            set<i>(get<i>() + vec.get<i>());
+            set(i, get(i) + vec.get(i));
 
         return *this;
     }
@@ -315,7 +183,7 @@ public:
     Vector & operator -= (const Vector & vec)
     {
         for (unsigned i = 0; i < N; ++i)
-            set<i>(get<i>() - vec.get<i>());
+            set(i, get(i) - vec.get(i));
 
         return *this;
     }
@@ -330,7 +198,7 @@ public:
         Vector tmp (*this);
 
         for (unsigned i = 0; i < N; ++i)
-            tmp.set<i>(-get<i>());
+            tmp.set(i, -get(i));
 
         return tmp;
     }
@@ -338,7 +206,7 @@ public:
     Vector & operator *= (T f)
     {
         for (unsigned i = 0; i < N; ++i)
-            set<i>(get<i>() * f);
+            set(i, get(i) * f);
 
         return *this;
     }
@@ -354,7 +222,7 @@ public:
             throw std::domain_error("Mw.Math.Vector: Division by zero");
 
         for (unsigned i = 0; i < N; ++i)
-            set<i>(get<i>() / f);
+            set(i, get(i) / f);
 
         return *this;
     }
@@ -363,7 +231,7 @@ public:
     bool operator == (const Vector & vec) const
     {
         for (unsigned i = 0; i < N; ++i)
-            if (std::abs(get<i>() - vec.get<i>()) > std::numeric_limits<T>::epsilon())
+            if (std::abs(get(i) - vec.get(i)) > std::numeric_limits<T>::epsilon())
                 return false;
 
         return true;
@@ -382,17 +250,13 @@ public:
         T len = static_cast<T>(0);
 
         for (unsigned i = 0; i < N; ++i)
-            len += get<i>()^2;
+            len += get(i)^2;
 
         return std::sqrt(len);
     }
 
 };
 // class Vector
-
-template<typename T> typedef Vector<T, 2> Vector2;
-template<typename T> typedef Vector<T, 3> Vector3;
-template<typename T> typedef Vector<T, 4> Vector4;
 
 
 /**
@@ -413,13 +277,13 @@ Vector<T, N> project(const Vector<T, N> & first, const Vector<T, N> & second)
     // prod = dot(A, B) / B.length ^ 2
     T prod = static_cast<T>(0);
     for (unsigned i = 0; i < N; ++i)
-        prod += second.get<i>()^2;
+        prod += second.get(i)^2;
 
     prod = first.dot(second) / prod;
 
     Vector<T, N> t;
     for (unsigned i = 0; i < N; ++i)
-        t.set<i>(second.get<i>() * prod);
+        t.set(i, second.get(i) * prod);
     return t;
 }
 
@@ -431,7 +295,7 @@ Vector<T, N> project(const Vector<T, N> & first, const Vector<T, N> & second)
  * @return Scalar projection of first vector on second.
  */
 template<typename T, unsigned N>
-T scalarProject(const Vector<T, N> & first, const Vector<T, N> & second) const
+T scalarProject(const Vector<T, N> & first, const Vector<T, N> & second)
 {
     return first.dot(second.getNormalization());
 }
@@ -452,7 +316,7 @@ Vector<T, N> normalize(const Vector<T, N> & vector)
 
     Vector<T, N> t;
     for (unsigned i = 0; i < N; ++i)
-        t.set<i>(vector.get<i>() / len);
+        t.set(i, vector.get(i) / len);
     return t;
 }
 
@@ -463,13 +327,13 @@ Vector<T, N> normalize(const Vector<T, N> & vector)
  * @param vec Vector to insert into the stream.
  * @return @c ostr Output stream.
  */
-template <typename T, typename N>
+template <typename T, unsigned N>
 std::ostream & operator << (std::ostream & ostr, const Vector<T, N> & vec)
 {
-    ostr << "Vector<" << N << ">[" << vec.get<0>();
+    ostr << "Vector<" << N << ">[" << vec.get(0);
 
     for (unsigned i = 0; i < N; ++i)
-        ostr << ", " << vec.get<i>();
+        ostr << ", " << vec.get(i);
 
     return ostr << "]";
 }

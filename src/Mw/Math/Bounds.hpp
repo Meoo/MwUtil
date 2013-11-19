@@ -19,7 +19,7 @@ MW_BEGIN_NAMESPACE(math)
  * @tparam N Dimension (number of components).
  * @tparam V Vectorial type.
  */
-template<typename T, typename N, class V = Vector<T, N> >
+template<typename T, unsigned N, class V = Vector<T, N> >
 class Bounds
 {
     /**
@@ -62,7 +62,7 @@ public:
      * @param bounds Bounds to copy.
      */
     template <typename U, class W>
-    Bounds(const Bounds<U, W> & bounds)
+    Bounds(const Bounds<U, N, W> & bounds)
         : _upper_limit(bounds.getUpperLimit()), _lower_limit(bounds.getLowerLimit())
     {}
 
@@ -77,7 +77,7 @@ public:
     bool isEmpty() const
     {
         for (unsigned i = 0; i < N; ++i)
-            if (getUpperLimit().get<i>() <= getLowerLimit().get<i>())
+            if (getUpperLimit().get(i) <= getLowerLimit().get(i))
                 return true;
 
         return false;
@@ -115,15 +115,15 @@ public:
     {
         for (unsigned i = 0; i < N; ++i)
         {
-            if (first.get<i>() > second.get<i>())
+            if (first.get(i) > second.get(i))
             {
-                _upper_limit.set<i>(first.get<i>());
-                _lower_limit.set<i>(second.get<i>());
+                _upper_limit.set(i, first.get(i));
+                _lower_limit.set(i, second.get(i));
             }
             else
             {
-                _upper_limit.set<i>(second.get<i>());
-                _lower_limit.set<i>(first.get<i>());
+                _upper_limit.set(i, second.get(i));
+                _lower_limit.set(i, first.get(i));
             }
         }
     }
@@ -164,11 +164,11 @@ public:
     {
         for (unsigned i = 0; i < N; ++i)
         {
-            if (vec.get<i>() > getUpperLimit().get<i>())
-                _upper_limit.set<i>(vec.get<i>());
+            if (vec.get(i) > getUpperLimit().get(i))
+                _upper_limit.set(i, vec.get(i));
 
-            if (vec.get<i>() < getLowerLimit().get<i>())
-                _lower_limit.set<i>(vec.get<i>());
+            if (vec.get(i) < getLowerLimit().get(i))
+                _lower_limit.set(i, vec.get(i));
         }
     }
 
@@ -197,11 +197,11 @@ public:
 
         for (unsigned i = 0; i < N; ++i)
         {
-            if (upper.get<i>() < getUpperLimit().get<i>())
-                _upper_limit.set<i>(upper.get<i>());
+            if (upper.get(i) < getUpperLimit().get(i))
+                _upper_limit.set(i, upper.get(i));
 
-            if (lower.get<i>() > getLowerLimit().get<i>())
-                _lower_limit.set<i>(lower.get<i>());
+            if (lower.get(i) > getLowerLimit().get(i))
+                _lower_limit.set(i, lower.get(i));
         }
     }
 
@@ -211,9 +211,9 @@ public:
      * @param bounds Other bounds to compute the intersection with.
      * @return
      */
-    Bounds2 getIntersection(const Bounds & bounds)
+    Bounds getIntersection(const Bounds & bounds)
     {
-        Bounds2 copy(*this);
+        Bounds copy(*this);
         copy.intersect(bounds);
         return copy;
     }
@@ -228,8 +228,8 @@ public:
     {
         for (unsigned i = 0; i < N; ++i)
         {
-            if (vec.get<i>() > getUpperLimit().get<i>()
-             || vec.get<i>() < getLowerLimit().get<i>())
+            if (vec.get(i) > getUpperLimit().get(i)
+             || vec.get(i) < getLowerLimit().get(i))
                 return false;
         }
 
@@ -246,8 +246,8 @@ public:
     {
         for (unsigned i = 0; i < N; ++i)
         {
-            if (bounds.getUpperLimit().get<i>() > getUpperLimit().get<i>()
-             && bounds.getLowerLimit().get<i>() < getLowerLimit().get<i>())
+            if (bounds.getUpperLimit().get(i) > getUpperLimit().get(i)
+             && bounds.getLowerLimit().get(i) < getLowerLimit().get(i))
                 return false;
         }
 
@@ -268,10 +268,6 @@ public:
 };
 // class Bounds
 
-template<typename T> typedef Bounds<T, 2, Vector2<T> > Bounds2;
-template<typename T> typedef Bounds<T, 3, Vector3<T> > Bounds3;
-template<typename T> typedef Bounds<T, 4, Vector4<T> > Bounds4;
-
 
 /**
  * Stream insertion operator overload.
@@ -280,7 +276,7 @@ template<typename T> typedef Bounds<T, 4, Vector4<T> > Bounds4;
  * @param bnd Bounds to insert into the stream.
  * @return @c ostr Output stream.
  */
-template <typename T, typename N, class V>
+template <typename T, unsigned N, class V>
 std::ostream & operator << (std::ostream & ostr, const Bounds<T, N, V> & bnd)
 {
     return ostr << "Bounds<" << N << ">[" << bnd.getLowerLimit() << ", " << bnd.getUpperLimit() << "]";
