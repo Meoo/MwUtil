@@ -173,6 +173,20 @@ public:
     }
 
     /**
+     * Affectation operator.
+     *
+     * @param vec
+     * @return
+     */
+    Vector & operator = (const Vector & vec)
+    {
+        for (unsigned i = 0; i < N; ++i)
+            set(i, vec.get(i));
+
+        return *this;
+    }
+
+    /**
      * Addition operator.
      *
      * @param vec
