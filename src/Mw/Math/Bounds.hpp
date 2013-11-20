@@ -10,6 +10,8 @@
 
 #include <Mw/Math/Vector.hpp>
 
+#include <boost/serialization/nvp.hpp>
+
 MW_BEGIN_NAMESPACE(math)
 
 /**
@@ -263,6 +265,19 @@ public:
     bool isIntersecting(const Bounds & bounds)
     {
         return !getIntersection(bounds).isEmpty();
+    }
+
+
+private:
+    // Serialization
+    friend class boost::serialization::access;
+    template<class Archive>
+    void serialize(Archive & ar, const unsigned int version)
+    {
+        using namespace boost::serialization;
+
+        ar & make_nvp("upper_limit", _upper_limit);
+        ar & make_nvp("lower_limit", _lower_limit);
     }
 
 };

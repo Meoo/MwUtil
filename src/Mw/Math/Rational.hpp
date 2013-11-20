@@ -11,6 +11,7 @@
 #include <stdexcept>
 #include <ostream>
 
+#include <boost/serialization/nvp.hpp>
 #include <boost/assert.hpp>
 #include <boost/operators.hpp>
 
@@ -263,6 +264,19 @@ public:
     bool operator < (const Rational & rat) const
     {
         return (_numerator * rat._denominator < _denominator * rat._numerator);
+    }
+
+
+private:
+    // Serialization
+    friend class boost::serialization::access;
+    template<class Archive>
+    void serialize(Archive & ar, const unsigned int version)
+    {
+        using namespace boost::serialization;
+
+        ar & make_nvp("numerator", _numerator);
+        ar & make_nvp("denominator", _denominator);
     }
 
 };

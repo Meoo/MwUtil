@@ -13,6 +13,7 @@
 #include <ostream>
 #include <stdexcept>
 
+#include <boost/serialization/nvp.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/assert.hpp>
@@ -293,6 +294,18 @@ public:
             len += get(i)^2;
 
         return std::sqrt(len);
+    }
+
+
+private:
+    // Serialization
+    friend class boost::serialization::access;
+    template<class Archive>
+    void serialize(Archive & ar, const unsigned int version)
+    {
+        using namespace boost::serialization;
+
+        ar & make_nvp("components", _components);
     }
 
 };

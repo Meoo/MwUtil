@@ -8,8 +8,9 @@
 
 #include <Mw/Config.hpp>
 
-#include <Mw/Math/Vector2.hpp>
-#include <Mw/Math/Vector3.hpp>
+#include <Mw/Math/Vector.hpp>
+
+#include <boost/serialization/nvp.hpp>
 
 MW_BEGIN_NAMESPACE(math)
 
@@ -147,12 +148,21 @@ public:
         return point - _normal * d; // TODO d - origin?
     }
 
+
+private:
+    // Serialization
+    friend class boost::serialization::access;
+    template<class Archive>
+    void serialize(Archive & ar, const unsigned int version)
+    {
+        using namespace boost::serialization;
+
+        ar & make_nvp("normal", _normal);
+        ar & make_nvp("origin", _origin);
+    }
+
 };
 // class Plane
-
-template<typename T> typedef Plane<T, Vector2<T> > Plane2;
-template<typename T> typedef Plane<T, Vector3<T> > Plane3;
-template<typename T> typedef Plane<T, Vector4<T> > Plane4;
 
 MW_END_NAMESPACE(math)
 

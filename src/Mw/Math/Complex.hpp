@@ -11,6 +11,7 @@
 #include <ostream>
 #include <cmath>
 
+#include <boost/serialization/nvp.hpp>
 #include <boost/operators.hpp>
 
 MW_BEGIN_NAMESPACE(math)
@@ -149,6 +150,19 @@ public:
     bool operator == (const Complex & cpx) const
     {
         return _a == cpx._a && _b == cpx._b;
+    }
+
+
+private:
+    // Serialization
+    friend class boost::serialization::access;
+    template<class Archive>
+    void serialize(Archive & ar, const unsigned int version)
+    {
+        using namespace boost::serialization;
+
+        ar & make_nvp("real", _a);
+        ar & make_nvp("imaginary", _b);
     }
 
 };
