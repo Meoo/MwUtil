@@ -79,7 +79,7 @@ public:
 
         unsigned i = 0;
         for (T v : list)
-            set<i>(v);
+            set(i++, v);
     }
 #endif
 
@@ -172,6 +172,12 @@ public:
         return t;
     }
 
+    /**
+     * Addition operator.
+     *
+     * @param vec
+     * @return
+     */
     Vector & operator += (const Vector & vec)
     {
         for (unsigned i = 0; i < N; ++i)
@@ -180,6 +186,12 @@ public:
         return *this;
     }
 
+    /**
+     * Substraction operator.
+     *
+     * @param vec
+     * @return
+     */
     Vector & operator -= (const Vector & vec)
     {
         for (unsigned i = 0; i < N; ++i)
@@ -203,34 +215,48 @@ public:
         return tmp;
     }
 
-    Vector & operator *= (T f)
+    /**
+     * Multiplication operator.
+     *
+     * @param factor Scalar factor.
+     * @return
+     */
+    Vector & operator *= (T factor)
     {
         for (unsigned i = 0; i < N; ++i)
-            set(i, get(i) * f);
+            set(i, get(i) * factor);
 
         return *this;
     }
 
     /**
-     * @param f
+     * Division operator.
+     *
+     * @param divisor Scalar divisor.
      * @return
      * @throw std::runtime_exception Division by zero
      */
-    Vector & operator /= (T f)
+    Vector & operator /= (T divisor)
     {
-        if (f == static_cast<T>(0))
+        if (divisor == static_cast<T>(0))
             throw std::domain_error("Mw.Math.Vector: Division by zero");
 
         for (unsigned i = 0; i < N; ++i)
-            set(i, get(i) / f);
+            set(i, get(i) / divisor);
 
         return *this;
     }
 
-    // TODO Should the equal operation be strict?
+    /**
+     * Equality comparator.
+     *
+     * @param vec
+     * @return
+     */
     bool operator == (const Vector & vec) const
     {
         for (unsigned i = 0; i < N; ++i)
+            // TODO Should the equal operation be strict?
             if (std::abs(get(i) - vec.get(i)) > std::numeric_limits<T>::epsilon())
                 return false;
 
@@ -316,7 +342,7 @@ Vector<T, N> normalize(const Vector<T, N> & vector)
 
     Vector<T, N> t;
     for (unsigned i = 0; i < N; ++i)
-        t.set(i, vector.get(i) / len);
+        t.set(i, vector.get(i) / len); // TODO Use fast invert sqrt? Precision loss...
     return t;
 }
 
