@@ -84,12 +84,6 @@ solution "MwUtil"
   targetdir(BIN_DIR)
   objdir   (OBJ_DIR)
 
-  includedirs { BOOST_INCLUDE_DIR }
-  libdirs     { BOOST_LIBS_DIR }
-  
-  --includedirs { LUA_INCLUDE_DIR }
-  --libdirs     { LUA_LIBS_DIR }
-
   flags { "ExtraWarnings", "FatalWarnings", "NoPCH" }
   
   if STDLIB_STATIC then
@@ -111,32 +105,6 @@ solution "MwUtil"
 
 -- ///////////////////////////////////////////////////// --
 
---[[
-project "mw-lua"
-  language "C++"
-  location (MAKE_DIR)
-  kind     (MW_KIND)
-  
-  flags { "NoRTTI" }
-
-  BOOST_LIBS = { }
-
-  links_Lua()
-
-  files       { "src/Mw/Lua/**.cpp" }
-  includedirs { "src" }
-
-  configuration "Debug"
-    targetsuffix( MW_SUFFIX .."-d" )
-    links_Boost ( BOOST_LIBS, true )
-
-  configuration "Release"
-    targetsuffix( MW_SUFFIX )
-    links_Boost ( BOOST_LIBS, false )
-]]
-
--- ///////////////////////////////////////////////////// --
-
 project "Test"
   language "C++"
   location (MAKE_DIR)
@@ -147,11 +115,4 @@ project "Test"
   files       { "test/Mw/**.cpp" }
   includedirs { "src" }
 
-  --links { "mw" }
-
-  configuration "Debug"
-    links_Boost ( BOOST_LIBS, true )
-
-  configuration "Release"
-    links_Boost ( BOOST_LIBS, false )
-    
+  use_Boost ( BOOST_LIBS )
